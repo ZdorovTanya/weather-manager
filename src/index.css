@@ -66,6 +66,9 @@ h1, h2,h3, h4, h5, h6{
 }
 /* -------------------------- */
 
+body{
+    font-family: 'Poppins', sans-serif;
+}
 
 p{
     font-size: 1.6rem;
@@ -76,5 +79,5 @@ h1{
 }
 
 .bold{
-    font-weight: 700;
+    font-weight: 600;
 }

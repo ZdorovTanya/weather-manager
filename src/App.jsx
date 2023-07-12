@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-import ToDo from "./component/ToDo";
-import SaveCityForm from "./component/SaveCityForm";
+import { v4 } from "uuid";
 // import { useGeolocated } from "react-geolocated";
 
 function App() {
   const [data, setData] = useState({});
   const [location, setLocation] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-  // массив для хранения городов
-  const [todos, setTodos] = useState([]);
+  // сохранение города
+  const [item, setItem] = useState("");
+  // помещение в localStorage
+  const [items, setItems] = useState(
+    JSON.parse(localStorage.getItem("items")) || []
+  );
 
   // для поиска погоды по городу
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=ba2320d010c5fbf82600343aabd04822`;
@@ -20,36 +21,31 @@ function App() {
     if (event.key === "Enter") {
       axios.get(url).then((response) => {
         setData(response.data);
-        // console.log(response.data);
       });
       setLocation("");
     }
   };
 
-  // поиск координат пользователя
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition((position) => {
-  //     console.log(position.coords);
-  //     console.log(navigator.geolocation);
-  //     setLatitude(position.coords.latitude);
-  //     setLongitude(position.coords.longitude);
-  //   });
-  // }, []);
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+  }, [items]);
 
-  // добавление города
-  const addCity = (userInput) => {
-    if (userInput) {
+  const newItem = () => {
+    console.log(data.name);
+    setItem(data.name);
+    if (item.trim() !== "") {
       const newItem = {
-        id: Math.random().toString(36).substring(2, 9),
-        task: userInput,
+        id: v4(),
+        item: data.name,
       };
-      setTodos([...todos, newItem]);
+      setItems((items) => [...items, newItem]);
+    } else {
+      alert("что-то пошло не так");
     }
   };
 
-  // удаление города
-  const removeCity = (id) => {
-    setTodos([...todos.filter((todo) => todo.id !== id)]);
+  const deleteCity = (id) => {
+    setItems(items.filter((item) => item.id !== id));
   };
 
   return (
@@ -64,6 +60,7 @@ function App() {
             type="text"
           />
         </div>
+
         <div className="container">
           <div className="top">
             <div className="location">
@@ -77,40 +74,45 @@ function App() {
             </div>
           </div>
 
+          <div className="favotire">
+            {items.map((item, index) => {
+              return (
+                <div className="fav-city">
+                  <div className="city-wrap">
+                    <p>{`${item.item}`}</p>
+                    <button className="btn" onClick={() => deleteCity(item.id)}>☓</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           {data.name != undefined && (
-            <div className="bottom">
-              <div className="feels">
-                {data.main ? (
-                  <p className="bold">{data.main.feels_like} ℃</p>
-                ) : null}
-                <p>Feels like</p>
+            <>
+              <div className="bottom">
+                <button className="save bold" onClick={newItem}>Save city</button>
+                <div className="feels">
+                  {data.main ? (
+                    <p className="bold">{data.main.feels_like} ℃</p>
+                  ) : null}
+                  <p>Feels like</p>
+                </div>
+                <div className="humidity">
+                  {data.main ? (
+                    <p className="bold">{data.main.humidity}%</p>
+                  ) : null}
+                  <p>Humidity</p>
+                </div>
+                <div className="wind">
+                  {data.wind ? (
+                    <p className="bold">{data.wind.speed} km/h</p>
+                  ) : null}
+                  <p>Wind Speed</p>
+                </div>
               </div>
-              <div className="humidity">
-                {data.main ? (
-                  <p className="bold">{data.main.humidity}%</p>
-                ) : null}
-                <p>Humidity</p>
-              </div>
-              <div className="wind">
-                {data.wind ? (
-                  <p className="bold">{data.wind.speed} km/h</p>
-                ) : null}
-                <p>Wind Speed</p>
-              </div>
-            </div>
+            </>
           )}
         </div>
-{/* 
-        <SaveCityForm addCity={addCity} />
-        {todos.map((todo) => {
-          return (
-            <ToDo 
-            todo={todo}
-            removeCity={removeCity}
-            key={todo.id}
-            />
-          )
-        })} */}
       </div>
     </>
   );
