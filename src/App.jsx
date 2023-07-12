@@ -7,12 +7,12 @@ import { v4 } from "uuid";
 function App() {
   const [data, setData] = useState({});
   const [location, setLocation] = useState("");
-  // сохранение города
-  const [item, setItem] = useState("");
   // помещение в localStorage
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items")) || []
   );
+  // геолокация
+  const [details, setDatails] = useState(null);
 
   // для поиска погоды по городу
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=ba2320d010c5fbf82600343aabd04822`;
@@ -26,14 +26,30 @@ function App() {
     }
   };
 
+  const searchLocationFromCity = (item) => {
+    console.log(item);
+    setLocation(item);
+    axios.get(url).then((response) => {
+      setData(response.data);
+    });
+    // setLocation("");
+  };
+
+  // поиск города по геолокации
+  const getUserGeolocation = () => {
+    fetch(
+      "https://geolocation-db.com/json/f2e84010-e1e9-11ed-b2f8-6b70106be3c8"
+    )
+      .then((response) => response.json())
+      .then((data) => setDatails(data));
+  };
+
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(items));
   }, [items]);
 
   const newItem = () => {
-    console.log(data.name);
-    setItem(data.name);
-    if (item.trim() !== "") {
+    if (data.name.trim() !== "") {
       const newItem = {
         id: v4(),
         item: data.name,
@@ -51,14 +67,22 @@ function App() {
   return (
     <>
       <div className="App">
-        <div className="search">
-          <input
-            value={location}
-            onChange={(event) => setLocation(event.target.value)}
-            onKeyDown={searchLocation}
-            placeholder="Enter Location"
-            type="text"
-          />
+        <div className="user-city">
+          <div className="search">
+            <input
+              value={location}
+              onChange={(event) => setLocation(event.target.value)}
+              onKeyDown={searchLocation}
+              placeholder="Enter Location"
+              type="text"
+            />
+
+            <div className="coordination" onClick={getUserGeolocation}>
+              <img src="/public/img/location.svg" alt="" />
+            </div>
+          </div>
+
+          {details && <div className="location">City: {`${details.city}`}</div>}
         </div>
 
         <div className="container">
@@ -77,10 +101,16 @@ function App() {
           <div className="favotire">
             {items.map((item, index) => {
               return (
-                <div className="fav-city">
+                <div className="fav-city" key={item.id}>
                   <div className="city-wrap">
-                    <p>{`${item.item}`}</p>
-                    <button className="btn" onClick={() => deleteCity(item.id)}>☓</button>
+                    <p
+                      onClick={() => {
+                        searchLocationFromCity(item.item);
+                      }}
+                    >{`${item.item}`}</p>
+                    <button className="btn" onClick={() => deleteCity(item.id)}>
+                      ☓
+                    </button>
                   </div>
                 </div>
               );
@@ -90,7 +120,9 @@ function App() {
           {data.name != undefined && (
             <>
               <div className="bottom">
-                <button className="save bold" onClick={newItem}>Save city</button>
+                <button className="save bold" onClick={newItem}>
+                  Save city
+                </button>
                 <div className="feels">
                   {data.main ? (
                     <p className="bold">{data.main.feels_like} ℃</p>

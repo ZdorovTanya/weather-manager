@@ -30,10 +30,22 @@
 }
 
 .search {
-  text-align: center;
   padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.coordination img {
+  opacity: 0.5;
+}
+.coordination img:hover {
+  opacity: 1;
+}
+
+.location {
+  text-align: center;
+}
 input {
   padding: 0.7rem 1.5rem;
   font-size: 1.2rem;
@@ -50,7 +62,7 @@ input {
   margin: 1rem auto;
 }
 
-.fav-city{
+.fav-city {
   display: inline-block;
   padding: 10px;
   border-radius: 10px;
@@ -58,25 +70,27 @@ input {
   margin: 20px;
   background-color: rgba(255, 255, 255, 0.5);
 }
-.city-wrap{
+.city-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  cursor: pointer;
 }
 
-.btn{
+.btn {
   background-color: transparent;
 }
 
-.save{
+.save {
   background-color: rgb(240, 240, 240);
   padding: 1rem;
   border-radius: 12px;
   font-size: 1rem;
+  text-transform: uppercase;
 }
 
-.save:hover{
+.save:hover {
   background-color: rgb(218, 218, 218);
 }
 .bottom {
