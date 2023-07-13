@@ -42,6 +42,7 @@ function App() {
     )
       .then((response) => response.json())
       .then((data) => setDatails(data));
+    console.log(details.city);
   };
 
   useEffect(() => {
@@ -82,7 +83,9 @@ function App() {
             </div>
           </div>
 
-          {details && <div className="location">City: {`${details.city}`}</div>}
+          {details && (
+            <div className="userLocation">City: {`${details.city}`}</div>
+          )}
         </div>
 
         <div className="container">

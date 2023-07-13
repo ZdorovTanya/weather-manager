@@ -19,7 +19,6 @@
 
 .container {
   max-width: 700px;
-  /* height: 700px; */
   margin: auto;
   padding: 0 1rem;
   position: relative;
@@ -43,7 +42,7 @@
   opacity: 1;
 }
 
-.location {
+.userLocation {
   text-align: center;
 }
 input {
@@ -84,6 +83,7 @@ input {
 
 .save {
   background-color: rgb(240, 240, 240);
+  color: rgb(43, 43, 43);
   padding: 1rem;
   border-radius: 12px;
   font-size: 1rem;
