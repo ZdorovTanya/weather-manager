@@ -1,0 +1,26 @@
+{
+  "coord": { "lon": 33.5333, "lat": 44.6 },
+  "weather": [
+    { "id": 800, "main": "Clear", "description": "clear sky", "icon": "01d" }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 296.5,
+    "feels_like": 296.33,
+    "temp_min": 296.5,
+    "temp_max": 296.5,
+    "pressure": 1014,
+    "humidity": 55,
+    "sea_level": 1014,
+    "grnd_level": 1010
+  },
+  "visibility": 10000,
+  "wind": { "speed": 5.61, "deg": 308, "gust": 7.05 },
+  "clouds": { "all": 0 },
+  "dt": 1689064056,
+  "sys": { "country": "UA", "sunrise": 1689041451, "sunset": 1689096680 },
+  "timezone": 10800,
+  "id": 694423,
+  "name": "Sevastopol",
+  "cod": 200
+}
