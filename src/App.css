@@ -17,7 +17,7 @@
   z-index: -1;
 }
 
-.container {
+.wrapper {
   max-width: 700px;
   margin: auto;
   padding: 0 1rem;
@@ -45,7 +45,7 @@
 .userLocation {
   text-align: center;
 }
-input {
+.find {
   padding: 0.7rem 1.5rem;
   font-size: 1.2rem;
   border-radius: 25px;

@@ -13,6 +13,10 @@ function App() {
   );
   // геолокация
   const [details, setDatails] = useState(null);
+  // доп функции
+  const [checkedTime, setCheckedTime] = useState(false);
+  const [checkedLon, setCheckedLon] = useState(false);
+  const [checkedLat, setCheckedLat] = useState(false);
 
   // для поиска погоды по городу
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=ba2320d010c5fbf82600343aabd04822`;
@@ -27,14 +31,15 @@ function App() {
   };
 
   const searchLocationFromCity = (item) => {
-    console.log(item);
     setLocation(item);
-    axios.get(url).then((response) => {
-      setData(response.data);
-    });
     // setLocation("");
   };
 
+  useEffect(() => {
+    axios.get(url).then((response) => {
+      setData(response.data);
+    });
+  }, [location]);
   // поиск города по геолокации
   const getUserGeolocation = () => {
     fetch(
@@ -42,7 +47,7 @@ function App() {
     )
       .then((response) => response.json())
       .then((data) => setDatails(data));
-    console.log(details.city);
+    console.log(data.name);
   };
 
   useEffect(() => {
@@ -71,6 +76,7 @@ function App() {
         <div className="user-city">
           <div className="search">
             <input
+              className="find"
               value={location}
               onChange={(event) => setLocation(event.target.value)}
               onKeyDown={searchLocation}
@@ -88,7 +94,7 @@ function App() {
           )}
         </div>
 
-        <div className="container">
+        <div className="wrapper">
           <div className="top">
             <div className="location">
               <p>{data.name}</p>
@@ -144,6 +150,61 @@ function App() {
                   ) : null}
                   <p>Wind Speed</p>
                 </div>
+              </div>
+
+              <div className="bottom">
+                <div className="additional-functions">
+                  <div className="row flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={checkedTime}
+                      name="time"
+                      onChange={() => setCheckedTime(!checkedTime)}
+                      className="w-4 h-4 mr-1"
+                    />
+                    <p>
+                      <label for="time">Timezone</label>
+                    </p>
+                  </div>
+
+                  <p className="bold">{checkedTime ? data.timezone : null}</p>
+                </div>
+
+                <div className="additional-functions ">
+                  <div className="row flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={checkedLon}
+                      name="longitude"
+                      onChange={() => setCheckedLon(!checkedLon)}
+                      className="w-4 h-4 mr-1"
+                    />
+                    <p>
+                      <label for="longitude">Longitude</label>
+                    </p>
+                  </div>
+
+                  <p className="bold">{checkedLon ? data.coord.lon : null}</p>
+                </div>
+
+                <div className="additional-functions">
+                  <div className="row flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={checkedLat}
+                      name="latitude"
+                      onChange={() => setCheckedLat(!checkedLat)}
+                      className="w-4 h-4 mr-1"
+                    />
+                    <p>
+                      <label for="latitude">
+                        Latitude</label>
+                    </p>
+                  </div>
+
+                  <p className="bold">{checkedLat ? data.coord.lat : null}</p>
+                </div>
+
               </div>
             </>
           )}
